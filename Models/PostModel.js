@@ -7,6 +7,7 @@ required:true},
     type:String,
     required:true
 },
+postdes:{type:String},
 imgurl:{
     type:String,
 },

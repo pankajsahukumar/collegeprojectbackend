@@ -7,6 +7,12 @@ email:{
     type:String,
     required:true
 },
+coverimg:{
+    type:String,
+},
+profilepic:{
+    type:String,
+},
 type:{
  type:Boolean,
  default:false,

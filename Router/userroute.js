@@ -1,6 +1,26 @@
 const Router = require('express').Router();
 const  bcrypt = require('bcryptjs');
 const User = require('../Models/User');
+
+Router.get("/",async(req,res)=>{
+    const userId =req.query.userId;
+    const username=req.query.username;
+    try{
+        let data;
+        if(userId)
+        {
+            data = await User.findById(userId);
+        }else
+        {
+            data = await User.findOne({Username:username});
+        }
+        const {password,updateAt,...other} =data._doc;
+        res.status(200).json(other); 
+    }catch(err){
+        res.status(500).json(err);
+    }
+})
+
 Router.put('/change',async(req,res)=>{
     try{
      const check = await User.findOne({email:req.body.email});
@@ -20,4 +40,6 @@ Router.put('/change',async(req,res)=>{
         res.json({"error":err});
     }
 });
+
+
 module.exports = Router;

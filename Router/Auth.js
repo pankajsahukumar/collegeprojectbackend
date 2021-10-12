@@ -8,30 +8,29 @@ router.post('/Login',(req,res,next)=>{
     if(err)
     throw err;
     if(!user)
-    return res.json("wrong");
+    return res.status(400).json("wrong");
       const token = jwt.sign(user.toJSON(),"this is pankaj");
     req.logIn(user,err=>{
       if(err)
       throw err;
-      console.log(user);
-      res.json({token:token});
+      res.status(200).json({user:user,token:token});
     })
   })(req,res,next);
-  
 });
 
 router.post('/register',async(req,res)=>{
-  const {email,password}=req.body;
+
+  console.log(req.body);
   try{
-    const checkexist = await User.findOne({email:email});
-    const data =await bcrypt.hash(password,10);
+    const checkexist = await User.findOne({email:req.body.email});
+    const data =await bcrypt.hash(req.body.password,10);
     if(checkexist){
       return res.json("user exist");
     }else{
-      const usersave = new User({email:email,password:data});
-      console.log(usersave)
+      const usersave = new User(req.body);
       const detail = await usersave.save();
-      return res.json({"message":"successfully","user":detail});
+
+      return res.json({"user":detail});
     }
   }catch(err){
     return res.json({"error":err});
